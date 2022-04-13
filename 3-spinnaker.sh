@@ -4,7 +4,7 @@
 
 . ./0-common.sh
 
-CHART=$OUT_DIR/spinnaker-1.16.1.tgz
+CHART=$OUT_DIR/spinnaker-2.2.7.tgz
 SPINNAKER=$OUT_DIR/spinnaker.yaml
 
 spinnakerRunning() {
@@ -24,15 +24,16 @@ installSpinnaker() {
         info "Spinnaker is already running!"                
     else
         trace "Spinnaker is not running..."
-        # Throw Error if config is invalid
-        trace 'init helm...'
-        helm init -c
+        trace 'add repo'
+        helm repo add spinnaker https://helmcharts.opsmx.com/
+
         trace 'fetching spinnaker helm chart...'
-        helm fetch stable/spinnaker --version=1.16.1 --destination $OUT_DIR
+        helm pull spinnaker/spinnaker --version=2.2.7 --destination $OUT_DIR
 
         trace 'templating helm chart...'
-        helm template --name spin --namespace spin  --values values.yaml $CHART > $SPINNAKER
-
+        helm template spin --namespace spin --values values.yaml $CHART > $SPINNAKER
+        cat $SPINNAKER
+        
         trace 'creating namespace...'
         kubectl create namespace $NAMESPACE --dry-run -o yaml > $OUT_DIR/namespace.yaml
         kubectl apply -f $OUT_DIR/namespace.yaml

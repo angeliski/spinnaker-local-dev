@@ -1,5 +1,5 @@
 #!/bin/sh
-set -uo pipefail
+set -u pipefail
 . ./0-common.sh
 
 startMultipass() {

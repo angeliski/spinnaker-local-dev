@@ -24,11 +24,11 @@ installHelm() {
     if [ $RESULT -eq 0 ]
     then
         info "helm is already installed!"
+        helm version
     else
         trace "Installing helm ..."
-        curl -sLo $OUT_DIR/helm-v2.15.2-linux-amd64.tar.gz https://get.helm.sh/helm-v2.15.2-linux-amd64.tar.gz
-        tar -zxvf $OUT_DIR/helm-v2.15.2-linux-amd64.tar.gz  --no-same-owner -C $OUT_DIR
-        sudo mv $OUT_DIR/linux-amd64/helm /usr/local/bin/helm
+        curl https://raw.githubusercontent.com/helm/helm/main/scripts/get-helm-3 | bash
+        helm version
     fi    
 }
 
